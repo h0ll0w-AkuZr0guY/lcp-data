@@ -1,15 +1,27 @@
 [
   {
+    "id": "1772590916451",
+    "title": "643. 子数组最大平均数 I",
+    "category": "数组 滑动窗口",
+    "type": "algorithm",
+    "difficulty": "简单",
+    "language": "python",
+    "problemText": "给你一个由 `n` 个元素组成的整数数组 `nums` 和一个整数 `k` 。\n\n请你找出平均数最大且 **长度为 `k`** 的连续子数组，并输出该最大平均数。\n\n任何误差小于 `10-5` 的答案都将被视为正确答案。\n\n**示例 1：**\n> **输入：** nums = [1,12,-5,-6,50,3], k = 4\n> **输出：** 12.75\n> **解释：** 最大平均数 (12-5-6+50)/4 = 51/4 = 12.75\n\n**示例 2：**\n> **输入：** nums = [5], k = 1\n> **输出：** 5.00000\n\n**提示：**\n*   `n == nums.length`\n*   `1 <= k <= n <= 105`\n*   `-104 <= nums[i] <= 104`",
+    "solutionText": "class Solution(object):\n    def findMaxAverage(self, nums, k):\n        current_sum = sum(nums[:k])\n        max_sum = current_sum\n\n        for i in range(k, len(nums)):\n            current_sum = current_sum - nums[i - k] + nums[i]\n            max_sum = current_sum if current_sum > max_sum else max_sum\n        \n        return float(max_sum) / k\n        \"\"\"\n        :type nums: List[int]\n        :type k: int\n        :rtype: float\n        \"\"\"\n        ",
+    "images": {},
+    "isPinned": false
+  },
+  {
+    "type": "algorithm",
+    "isPinned": false,
     "id": "1772506428091",
     "title": "443. 压缩字符串",
     "category": "双指针 字符串",
-    "type": "algorithm",
     "difficulty": "中等",
     "language": "python",
     "problemText": "给你一个字符数组 `chars` ，请使用下述算法压缩：\n从一个空字符串 `s` 开始。对于 `chars` 中的每组 **连续重复字符** ：\n- 如果这一组长度为 `1` ，则将字符追加到 `s` 中。\n- 否则，需要向 `s` 追加字符，后跟这一组的长度。\n\n压缩后得到的字符串 `s` **不应该直接返回** ，需要转储到字符数组 `chars` 中。需要注意的是，如果组长度为 `10` 或 `10` 以上，则在 `chars` 数组中会被拆分为多个字符。\n请在 **修改完输入数组后** ，返回该数组的新长度。\n你必须设计并实现一个只使用常量额外空间的算法来解决此问题。\n**注意：** 数组中超出返回长度的字符无关紧要，应予忽略。\n\n**示例 1：**\n> **输入：** chars = [\"a\",\"a\",\"b\",\"b\",\"c\",\"c\",\"c\"]\n> **输出：** 返回 6 ，输入数组的前 6 个字符应该是：[\"a\",\"2\",\"b\",\"2\",\"c\",\"3\"]\n> **解释：**\"aa\" 被 \"a2\" 替代。\"bb\" 被 \"b2\" 替代。\"ccc\" 被 \"c3\" 替代。\n\n**示例 2：**\n> **输入：** chars = [\"a\"]\n> **输出：** 返回 1 ，输入数组的前 1 个字符应该是：[\"a\"]\n> **解释：** 唯一的组是“a”，它保持未压缩，因为它是一个字符。\n\n**示例 3：**\n> **输入：** chars = [\"a\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\"]\n> **输出：** 返回 4 ，输入数组的前 4 个字符应该是：[\"a\",\"b\",\"1\",\"2\"]。\n> **解释：** 由于字符 \"a\" 不重复，所以不会被压缩。\"bbbbbbbbbbbb\" 被 “b12” 替代。\n\n**提示：**\n*   `1 <= chars.length <= 2000`\n*   `chars[i]` 可以是小写英文字母、大写英文字母、数字或符号",
     "solutionText": "class Solution(object):\n    def compress(self, chars):\n        if not chars:\n            return 0\n\n        write = read = 0\n        n = len(chars)\n\n        while read < n:\n            current_char = chars[read]  # 当前遍历字符\n            count = 0  # 统计出现次数\n            while read < n and chars[read] == current_char:\n                count += 1\n                read += 1\n            chars[write] = current_char  # 写入当前字符\n            write += 1\n        \n            if count > 1:\n                count_str = str(count)  # 数字转换字符串\n                for digit in count_str:\n                    chars[write] = digit\n                    write += 1\n        \n        return write\n        \"\"\"\n        :type chars: List[str]\n        :rtype: int\n        \"\"\"\n        ",
-    "images": {},
-    "isPinned": false
+    "images": {}
   },
   {
     "type": "algorithm",
