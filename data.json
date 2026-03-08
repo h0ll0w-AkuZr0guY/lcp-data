@@ -1,39 +1,51 @@
 [
   {
+    "id": "1772954823013",
+    "title": "394. 字符串解码",
+    "category": "栈 递归 字符串",
+    "type": "algorithm",
+    "difficulty": "中等",
+    "language": "python",
+    "problemText": "给定一个经过编码的字符串，返回它解码后的字符串。\n编码规则为: `k[encoded_string]`，表示其中方括号内部的 `encoded_string` 正好重复 `k` 次。注意 `k` 保证为正整数。\n你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。\n此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 `k` ，例如不会出现像 `3a` 或 `2[4]` 的输入。\n测试用例保证输出的长度不会超过 `105`。\n\n**示例 1：**\n> **输入：** s = \"3[a]2[bc]\"\n> **输出：**\"aaabcbc\"\n\n**示例 2：**\n> **输入：** s = \"3[a2[c]]\"\n> **输出：**\"accaccacc\"\n\n**示例 3：**\n> **输入：** s = \"2[abc]3[cd]ef\"\n> **输出：**\"abcabccdcdcdef\"\n\n**示例 4：**\n> **输入：** s = \"abc3[cd]xyz\"\n> **输出：**\"abccdcdcdxyz\"\n\n**提示：**\n*   `1 <= s.length <= 30`\n*   `s` 由小写英文字母、数字和方括号 `'[]'` 组成\n* `s` 保证是一个**有效** 的输入。\n*   `s` 中所有整数的取值范围为 `[1, 300]`",
+    "solutionText": "class Solution(object):\n    def decodeString(self, s):\n        stack = []\n        result = ''\n        current_num = 0  # 用于存储累计数字（多位数） \n        \n        for char in s:\n            if char.isdigit():\n                current_num = current_num * 10 + int(char)\n            elif char == '[':\n                # 左括号，当前数字和之前的字符串入栈然后重置\n                stack.append((result, current_num))\n                result = ''\n                current_num = 0\n            elif char == ']':\n                # 右括号，弹出栈顶的（前缀字符串/重复次数），拼接结果\n                prev_str, num = stack.pop()\n                result = prev_str + num * result\n            else:\n                result += char  # 普通字符直接拼接\n        return result\n        \"\"\"\n        :type s: str\n        :rtype: str\n        \"\"\"\n        ",
+    "images": {},
+    "isPinned": false
+  },
+  {
+    "type": "algorithm",
+    "isPinned": false,
     "id": "1772885453424",
     "title": "735. 小行星碰撞",
     "category": "栈 数组",
-    "type": "algorithm",
     "difficulty": "中等",
     "language": "python",
     "problemText": "给定一个整数数组 `asteroids`，表示在同一行的小行星。数组中小行星的索引表示它们在空间中的相对位置。\n\n对于数组中的每一个元素，其绝对值表示小行星的大小，正负表示小行星的移动方向（正表示向右移动，负表示向左移动）。每一颗小行星以相同的速度移动。\n\n找出碰撞后剩下的所有小行星。碰撞规则：两个小行星相互碰撞，较小的小行星会爆炸。如果两颗小行星大小相同，则两颗小行星都会爆炸。两颗移动方向相同的小行星，永远不会发生碰撞。\n\n**示例 1：**\n> **输入：** asteroids = [5,10,-5]\n> **输出：**[5,10]\n> **解释：** 10 和 -5 碰撞后只剩下 10 。 5 和 10 永远不会发生碰撞。\n\n**示例 2：**\n> **输入：** asteroids = [8,-8]\n> **输出：**[]\n> **解释：** 8 和 -8 碰撞后，两者都发生爆炸。\n\n**示例 3：**\n> **输入：** asteroids = [10,2,-5]\n> **输出：**[10]\n> **解释：** 2 和 -5 发生碰撞后剩下 -5 。10 和 -5 发生碰撞后剩下 10 。\n\n**示例 4：**\n> **输入：** asteroids = [3,5,-6,2,-1,4]\n> **输出：**[-6,2,4]\n> **解释：** 小行星 -6 使小行星 3 和 5 爆炸，然后继续向左移动。在另一边，小行星 2 使小行星 -1 爆炸，然> 后继续向右移动，没有碰撞小行星 4。\n\n**提示：**\n*   `2 <= asteroids.length <= 104`\n*   `-1000 <= asteroids[i] <= 1000`\n*   `asteroids[i] != 0`",
     "solutionText": "class Solution(object):\n    def asteroidCollision(self, asteroids):\n        stack = []\n        for ast in asteroids:\n            destoryed = False  # 标记当前行星是否被撞毁（默认False）\n            # 栈不为空/栈顶向右/当前向左 发生碰撞\n            while stack and stack[-1] > 0 and ast < 0 and not destoryed:\n                if abs(ast) > abs(stack[-1]):\n                    stack.pop()\n                elif abs(ast) < abs(stack[-1]):\n                    destoryed = True\n                else:\n                    stack.pop()\n                    destoryed = True\n            \n            if not destoryed:\n                stack.append(ast)\n        return stack\n        \"\"\"\n        :type asteroids: List[int]\n        :rtype: List[int]\n        \"\"\"\n        ",
-    "images": {},
-    "isPinned": false
+    "images": {}
   },
   {
+    "type": "algorithm",
+    "isPinned": false,
     "id": "1772883032576",
     "title": "2352. 相等行列对",
     "category": "数组 哈希表 矩阵",
-    "type": "algorithm",
     "difficulty": "中等",
     "language": "python",
     "problemText": "给你一个下标从 **0** 开始、大小为 `n x n` 的整数矩阵 `grid` ，返回满足 `Ri` 行和 `Cj` 列相等的行列对 `(Ri, Cj)` 的数目。\n\n如果行和列以相同的顺序包含相同的元素（即相等的数组），则认为二者是相等的。\n\n**示例 1：**\n![图片](/images/img_177288308309432.jpeg)\n> **输入：** grid = [[3,2,1],[1,7,6],[2,7,7]]\n> **输出：** 1\n> **解释：** 存在一对相等行列对：\n> - (第 2 行，第 1 列)：[2,7,7]\n\n**示例 2：**\n![图片](/images/img_177288309234775.jpeg)\n> **输入：** grid = [[3,1,2,2],[1,4,4,5],[2,4,2,2],[2,4,2,2]]\n> **输出：** 3\n> **解释：** 存在三对相等行列对：\n> - (第 0 行，第 0 列)：[3,1,2,2]\n> - (第 2 行, 第 2 列)：[2,4,2,2]\n> - (第 3 行, 第 2 列)：[2,4,2,2]\n\n**提示：**\n*   `n == grid.length == grid[i].length`\n*   `1 <= n <= 200`\n*   `1 <= grid[i][j] <= 105`",
     "solutionText": "class Solution(object):\n    def equalPairs(self, grid):\n        ans = 0\n        for x in zip(*grid):\n            lx = list(x)\n            for y in grid:\n                if lx == y:\n                    ans += 1\n        return ans\n        \"\"\"\n        :type grid: List[List[int]]\n        :rtype: int\n        \"\"\"\n        ",
-    "images": {},
-    "isPinned": false
+    "images": {}
   },
   {
+    "type": "algorithm",
+    "isPinned": false,
     "id": "1772882074756",
     "title": "1657. 确定两个字符串是否接近",
     "category": "字符串 排序",
-    "type": "algorithm",
     "difficulty": "中等",
     "language": "python",
     "problemText": "如果可以使用以下操作从一个字符串得到另一个字符串，则认为两个字符串 **接近** ：\n\n*操作 1：交换任意两个**现有** 字符。\n- 例如，`abcde -> aecdb`\n*操作 2：将一个**现有**字符的每次出现转换为另一个**现有** 字符，并对另一个字符执行相同的操作。\n- 例如，`aacabb -> bbcbaa`（所有 `a` 转化为 `b` ，而所有的 `b` 转换为 `a` ）\n\n你可以根据需要对任意一个字符串多次使用这两种操作。\n\n给你两个字符串，`word1` 和 `word2` 。如果 `word1` 和 `word2` **接近** ，就返回 `true` ；否则，返回 `false` 。\n\n**示例 1：**\n> **输入：** word1 = \"abc\", word2 = \"bca\"\n> **输出：** true\n> **解释：** 2 次操作从 word1 获得 word2 。\n> 执行操作 1：\"abc\" -> \"acb\"\n> 执行操作 1：\"acb\" -> \"bca\"\n\n**示例 2：**\n> **输入：** word1 = \"a\", word2 = \"aa\"\n> **输出：** false\n> **解释：** 不管执行多少次操作，都无法从 word1 得到 word2 ，反之亦然。\n\n**示例 3：**\n> **输入：** word1 = \"cabbba\", word2 = \"abbccc\"\n> **输出：** true\n> **解释：** 3 次操作从 word1 获得 word2 。\n> 执行操作 1：\"cabbba\" -> \"caabbb\"\n> 执行操作 2：`\"`caabbb\" -> \"baaccc\"\n> 执行操作 2：\"baaccc\" -> \"abbccc\"\n\n**提示：**\n*   `1 <= word1.length, word2.length <= 105`\n*   `word1` 和 `word2` 仅包含小写英文字母",
     "solutionText": "class Solution(object):\n    def closeStrings(self, word1, word2):\n        return (len(word1) == len(word2) and\n                set(word1) == set(word2) and\n                sorted(Counter(word1).values()) == sorted(Counter(word2).values()))\n        # 条件1：两个字符串长度必须相等（长度不同不可能是接近字符串） \n        # 条件2：两个字符串的字符集合必须相等（字符种类完全一致） \n        # 条件3：字符出现次数的列表排序后相等（次数分布一致）\n        \"\"\"\n        :type word1: str\n        :type word2: str\n        :rtype: bool\n        \"\"\"\n        ",
-    "images": {},
-    "isPinned": false
+    "images": {}
   },
   {
     "type": "algorithm",
