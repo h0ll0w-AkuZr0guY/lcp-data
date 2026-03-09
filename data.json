@@ -1,15 +1,39 @@
 [
   {
+    "id": "1773046793770",
+    "title": "2130. 链表最大孪生和",
+    "category": "链表 双指针",
+    "type": "algorithm",
+    "difficulty": "中等",
+    "language": "python",
+    "problemText": "在一个大小为 `n` 且 `n` 为 **偶数** 的链表中，对于 `0 <= i <= (n / 2) - 1` 的 `i` ，第 `i` 个节点（下标从**0** 开始）的孪生节点为第 `(n-1-i)` 个节点 。\n\n*   比方说，`n = 4` 那么节点 `0` 是节点 `3` 的孪生节点，节点 `1` 是节点 `2` 的孪生节点。这是长度为 `n = 4` 的链表中所有的孪生节点。\n\n**孪生和** 定义为一个节点和它孪生节点两者值之和。\n\n给你一个长度为偶数的链表的头节点 `head` ，请你返回链表的 **最大孪生和** 。\n\n**示例 1：**\n![图片](/images/img_17730469020274.png)\n> **输入：** head = [5,4,2,1]\n> **输出：** 6\n> **解释：**\n> 节点 0 和节点 1 分别是节点 3 和 2 的孪生节点。孪生和都为 6 。\n> 链表中没有其他孪生节点。\n> 所以，链表的最大孪生和是 6 。\n\n**示例 2：**\n![图片](/images/img_177304693295650.png)\n> **输入：** head = [4,2,2,3]\n> **输出：** 7\n> **解释：**\n> 链表中的孪生节点为：\n> - 节点 0 是节点 3 的孪生节点，孪生和为 4 + 3 = 7 。\n> - 节点 1 是节点 2 的孪生节点，孪生和为 2 + 2 = 4 。\n> 所以，最大孪生和为 max(7, 4) = 7 。\n\n**示例 3：**\n![图片](/images/img_177304694276992.png)\n> **输入：** head = [1,100000]\n> **输出：** 100001\n> **解释：**\n> 链表中只有一对孪生节点，孪生和为 1 + 100000 = 100001 。\n\n**提示：**\n*链表的节点数目是 `[2, 105]` 中的**偶数** 。\n*   `1 <= Node.val <= 105`",
+    "solutionText": "# Definition for singly-linked list.\n# class ListNode(object):\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\nclass Solution(object):\n    def pairSum(self, head):\n        slow = head\n        fast = head\n        while fast and fast.next:\n            slow = slow.next\n            fast = fast.next.next\n\n        # 步骤2：反转链表的后半部分（从slow开始）\n        prev = None\n        curr = slow\n        while curr:\n            temp = curr.next  # 保存下一个节点\n            curr.next = prev  # 反转指针\n            prev = curr       # 前驱指针后移\n            curr = temp       # 当前指针后移\n\n        max_sum = 0\n        while prev:  # 只需遍历后半部分（长度为n/2）\n            current_sum = head.val + prev.val\n            max_sum = max(max_sum, current_sum)\n            head = head.next\n            prev = prev.next\n        return max_sum\n        \"\"\"\n        :type head: Optional[ListNode]\n        :rtype: int\n        \"\"\"\n        ",
+    "images": {},
+    "isPinned": false
+  },
+  {
+    "id": "1773045454038",
+    "title": "328. 奇偶链表",
+    "category": "链表",
+    "type": "algorithm",
+    "difficulty": "中等",
+    "language": "python",
+    "problemText": "给定单链表的头节点 `head` ，将所有索引为奇数的节点和索引为偶数的节点分别分组，保持它们原有的相对顺序，然后把偶数索引节点分组连接到奇数索引节点分组之后，返回重新排序的链表。\n\n**第一个** 节点的索引被认为是 **奇数** ，**第二个**节点的索引为**偶数** ，以此类推。\n\n请注意，偶数组和奇数组内部的相对顺序应该与输入时保持一致。\n\n你必须在 `O(1)` 的额外空间复杂度和 `O(n)` 的时间复杂度下解决这个问题。\n\n**示例 1:**\n![图片](/images/img_177304552463437.jpeg)\n> **输入:** head = [1,2,3,4,5]\n> **输出:** [1,3,5,2,4]\n\n**示例 2:**\n![图片](/images/img_177304553379812.jpeg)\n> **输入:** head = [2,1,3,5,6,4,7]\n> **输出:** [2,3,6,7,1,5,4]\n\n**提示:**\n*   `n ==`  链表中的节点数\n*   `0 <= n <= 104`\n*   `-106 <= Node.val <= 106`",
+    "solutionText": "# Definition for singly-linked list.\n# class ListNode(object):\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\nclass Solution(object):\n    def oddEvenList(self, head):\n        if not head or not head.next: # 如果只有一个节点或为空\n            return head\n        \n        pre_odd = ListNode(0)  # 奇数节点前驱\n        pre_even = ListNode(0)  # 偶数节点前驱\n        odd = pre_odd  # 奇数移动指针\n        even = pre_even  # 偶数移动指针\n        is_odd = True  # 是否为奇数位置\n        while head:\n            if is_odd:\n                odd.next = head\n                odd = odd.next\n            else:\n                even.next = head\n                even = even.next\n            is_odd = not is_odd  # 切换奇偶标记\n            head = head.next\n        even.next = None\n        odd.next = pre_even.next\n        return pre_odd.next\n        \"\"\"\n        :type head: Optional[ListNode]\n        :rtype: Optional[ListNode]\n        \"\"\"\n        ",
+    "images": {},
+    "isPinned": false
+  },
+  {
+    "type": "algorithm",
+    "isPinned": false,
     "id": "1772954823013",
     "title": "394. 字符串解码",
     "category": "栈 递归 字符串",
-    "type": "algorithm",
     "difficulty": "中等",
     "language": "python",
     "problemText": "给定一个经过编码的字符串，返回它解码后的字符串。\n编码规则为: `k[encoded_string]`，表示其中方括号内部的 `encoded_string` 正好重复 `k` 次。注意 `k` 保证为正整数。\n你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。\n此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 `k` ，例如不会出现像 `3a` 或 `2[4]` 的输入。\n测试用例保证输出的长度不会超过 `105`。\n\n**示例 1：**\n> **输入：** s = \"3[a]2[bc]\"\n> **输出：**\"aaabcbc\"\n\n**示例 2：**\n> **输入：** s = \"3[a2[c]]\"\n> **输出：**\"accaccacc\"\n\n**示例 3：**\n> **输入：** s = \"2[abc]3[cd]ef\"\n> **输出：**\"abcabccdcdcdef\"\n\n**示例 4：**\n> **输入：** s = \"abc3[cd]xyz\"\n> **输出：**\"abccdcdcdxyz\"\n\n**提示：**\n*   `1 <= s.length <= 30`\n*   `s` 由小写英文字母、数字和方括号 `'[]'` 组成\n* `s` 保证是一个**有效** 的输入。\n*   `s` 中所有整数的取值范围为 `[1, 300]`",
     "solutionText": "class Solution(object):\n    def decodeString(self, s):\n        stack = []\n        result = ''\n        current_num = 0  # 用于存储累计数字（多位数） \n        \n        for char in s:\n            if char.isdigit():\n                current_num = current_num * 10 + int(char)\n            elif char == '[':\n                # 左括号，当前数字和之前的字符串入栈然后重置\n                stack.append((result, current_num))\n                result = ''\n                current_num = 0\n            elif char == ']':\n                # 右括号，弹出栈顶的（前缀字符串/重复次数），拼接结果\n                prev_str, num = stack.pop()\n                result = prev_str + num * result\n            else:\n                result += char  # 普通字符直接拼接\n        return result\n        \"\"\"\n        :type s: str\n        :rtype: str\n        \"\"\"\n        ",
-    "images": {},
-    "isPinned": false
+    "images": {}
   },
   {
     "type": "algorithm",
@@ -91,7 +115,7 @@
     "category": "双指针 字符串",
     "difficulty": "中等",
     "language": "python",
-    "problemText": "给你一个字符数组 `chars` ，请使用下述算法压缩：\n从一个空字符串 `s` 开始。对于 `chars` 中的每组 **连续重复字符** ：\n- 如果这一组长度为 `1` ，则将字符追加到 `s` 中。\n- 否则，需要向 `s` 追加字符，后跟这一组的长度。\n\n压缩后得到的字符串 `s` **不应该直接返回** ，需要转储到字符数组 `chars` 中。需要注意的是，如果组长度为 `10` 或 `10` 以上，则在 `chars` 数组中会被拆分为多个字符。\n请在 **修改完输入数组后** ，返回该数组的新长度。\n你必须设计并实现一个只使用常量额外空间的算法来解决此问题。\n**注意：** 数组中超出返回长度的字符无关紧要，应予忽略。\n\n**示例 1：**\n> **输入：** chars = [\"a\",\"a\",\"b\",\"b\",\"c\",\"c\",\"c\"]\n> **输出：** 返回 6 ，输入数组的前 6 个字符应该是：[\"a\",\"2\",\"b\",\"2\",\"c\",\"3\"]\n> **解释：**\"aa\" 被 \"a2\" 替代。\"bb\" 被 \"b2\" 替代。\"ccc\" 被 \"c3\" 替代。\n\n**示例 2：**\n> **输入：** chars = [\"a\"]\n> **输出：** 返回 1 ，输入数组的前 1 个字符应该是：[\"a\"]\n> **解释：** 唯一的组是“a”，它保持未压缩，因为它是一个字符。\n\n**示例 3：**\n> **输入：** chars = [\"a\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\"]\n> **输出：** 返回 4 ，输入数组的前 4 个字符应该是：[\"a\",\"b\",\"1\",\"2\"]。\n> **解释：** 由于字符 \"a\" 不重复，所以不会被压缩。\"bbbbbbbbbbbb\" 被 “b12” 替代。\n\n**提示：**\n*   `1 <= chars.length <= 2000`\n*   `chars[i]` 可以是小写英文字母、大写英文字母、数字或符号",
+    "problemText": "给你一个字符数组 `chars` ，请使用下述算法压缩：\n从一个空字符串 `s` 开始。对于 `chars` 中的每组 **连续重复字符** ：\n- 如果这一组长度为 `1` ，则将字符追加到 `s` 中。\n- 否则，���要向 `s` 追加字符，后跟这一组的长度。\n\n压缩后得到的字符串 `s` **不应该直接返回** ，需要转储到字符数组 `chars` 中。需要注意的是，如果组长度为 `10` 或 `10` 以上，则在 `chars` 数组中会被拆分为多个字符。\n请在 **修改完输入数组后** ，返回该数组的新长度。\n你必须设计并实现一个只使用常量额外空间的算法来解决此问题。\n**注意：** 数组中超出返回长度的字符无关紧要，应予忽略。\n\n**示例 1：**\n> **输入：** chars = [\"a\",\"a\",\"b\",\"b\",\"c\",\"c\",\"c\"]\n> **输出：** 返回 6 ，输入数组的前 6 个字符应该是：[\"a\",\"2\",\"b\",\"2\",\"c\",\"3\"]\n> **解释：**\"aa\" 被 \"a2\" 替代。\"bb\" 被 \"b2\" 替代。\"ccc\" 被 \"c3\" 替代。\n\n**示例 2：**\n> **输入：** chars = [\"a\"]\n> **输出：** 返回 1 ，输入数组的前 1 个字符应该是：[\"a\"]\n> **解释：** 唯一的组是“a”，它保持未压缩，因为它是一个字符。\n\n**示例 3：**\n> **输入：** chars = [\"a\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\",\"b\"]\n> **输出：** 返回 4 ，输入数组的前 4 个字符应该是：[\"a\",\"b\",\"1\",\"2\"]。\n> **解释：** 由于字符 \"a\" 不重复，所以不会被压缩。\"bbbbbbbbbbbb\" 被 “b12” 替代。\n\n**提示：**\n*   `1 <= chars.length <= 2000`\n*   `chars[i]` 可以是小写英文字母、大写英文字母、数字或符号",
     "solutionText": "class Solution(object):\n    def compress(self, chars):\n        if not chars:\n            return 0\n\n        write = read = 0\n        n = len(chars)\n\n        while read < n:\n            current_char = chars[read]  # 当前遍历字符\n            count = 0  # 统计出现次数\n            while read < n and chars[read] == current_char:\n                count += 1\n                read += 1\n            chars[write] = current_char  # 写入当前字符\n            write += 1\n        \n            if count > 1:\n                count_str = str(count)  # 数字转换字符串\n                for digit in count_str:\n                    chars[write] = digit\n                    write += 1\n        \n        return write\n        \"\"\"\n        :type chars: List[str]\n        :rtype: int\n        \"\"\"\n        ",
     "images": {}
   },
@@ -235,7 +259,7 @@
     "category": "字符串 动态规划",
     "difficulty": "中等",
     "language": "python",
-    "problemText": "给你两个单词 `word1` 和 `word2`， *请返回将 `word1` 转换成 `word2` 所使用的最少操作数*  。\n\n你可以对一个单词进行如下三种操作：\n*   插入一个字符\n*   删除一个字符\n*   替换一个字符\n\n**示例 1：**\n> **输入：** word1 = \"horse\", word2 = \"ros\"\n> **输出：** 3\n> **解释：**\n> horse -> rorse (将 'h' 替换为 'r')\n> rorse -> rose (删除 'r')\n> rose -> ros (删除 'e')\n\n**示例 2：**\n> **输入：** word1 = \"intention\", word2 = \"execution\"\n> **输出：** 5\n> **解释：**\n> intention -> inention (删除 't')\n> inention -> enention (将 'i' 替换为 'e')\n> enention -> exention (将 'n' 替换为 'x')\n> exention -> exection (将 'n' 替换为 'c')\n> exection -> execution (插入 'u')\n\n**提示：**\n*   `0 <= word1.length, word2.length <= 500`\n*   `word1` 和 `word2` 由小写英文字母组成",
+    "problemText": "给你两个单词 `word1` 和 `word2`， *请返回将 `word1` 转换成 `word2` 所使用的最少操作数*  。\n\n你可以对一个单词进行如下三种操作：\n*   插入一个字符\n*   删除一个字符\n*   替换一个字符\n\n**示例 1：**\n> **输入：** word1 = \"horse\", word2 = \"ros\"\n> **输出：** 3\n> **解释：**\n> horse -> rorse (将 'h' 替换为 'r')\n> rorse -> rose (删除 'r')\n> rose -> ros (删除 'e')\n\n**示例 2：**\n> **输入：** word1 = \"intention\", word2 = \"execution\"\n> **输出：** 5\n> **解释：**\n> intention -> inention (删除 't')\n> inention -> enention (将 'i' 替换为 'e')\n> enention -> exention (将 'n' 替换为 'x')\n> exention -> exection (将 'n' 替换为 'c')\n> exection -> execution (插入 'u')\n\n**提示：**\n*   `0 <= word1.length, word2.length <= 500`\n*   `word1` 和 `word2` 由小写英文字母组��",
     "solutionText": "class Solution(object):\n    def minDistance(self, word1, word2):\n        m = len(word1)\n        n = len(word2)\n        if n * m == 0:\n            return n + m\n        dp = [[0] * (n + 1) for _ in range(m + 1)]\n\n        for i in range(m + 1):  # 边界初始化\n            dp[i][0] = i\n        for j in range(n + 1):\n            dp[0][j] = j\n        for i in range(1, m + 1):\n            for j in range(1, n + 1):\n                if word1[i - 1] != word2[j - 1]:\n                    dp[i - 1][j - 1] += 1\n                dp[i][j] = min(dp[i - 1][j] + 1,\n                               dp[i][j - 1] + 1,\n                               dp[i - 1][j - 1]\n                            )\n        \n        return dp[m][n]\n        \"\"\"\n        :type word1: str\n        :type word2: str\n        :rtype: int\n        \"\"\"\n        ",
     "images": {}
   },
