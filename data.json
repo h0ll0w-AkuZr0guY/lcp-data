@@ -1,39 +1,63 @@
 [
   {
+    "id": "1774423688876",
+    "title": "2300. 咒语和药水的成功对数",
+    "category": "数组 二分查找 排序",
+    "type": "algorithm",
+    "difficulty": "中等",
+    "language": "python",
+    "problemText": "给你两个正整数数组 `spells` 和 `potions` ，长度分别为 `n` 和 `m` ，其中 `spells[i]` 表示第 `i` 个咒语的能量强度，`potions[j]` 表示第 `j` 瓶药水的能量强度。\n同时给你一个整数 `success` 。一个咒语和药水的能量强度 **相乘** 如果**大于等于**`success` ，那么它们视为一对**成功** 的组合。\n请你返回一个长度为 `n` 的整数数组 `pairs`，其中 `pairs[i]` 是能跟第 `i` 个咒语成功组合的 **药水** 数目。\n\n**示例 1：**\n> **输入：** spells = [5,1,3], potions = [1,2,3,4,5], success = 7\n> **输出：**[4,0,3]\n> **解释：**\n> - 第 0 个咒语：5 *[1,2,3,4,5] = [5,***10***,***15***,***20***,***25***] 。总共 4 个成功组合。\n> - 第 1 个咒语：1 * [1,2,3,4,5] = [1,2,3,4,5] 。总共 0 个成功组合。\n> - 第 2 个咒语：3 *[1,2,3,4,5] = [3,6,***9***,***12***,***15***] 。总共 3 个成功组合。\n> 所以返回 [4,0,3] 。\n\n**示例 2：**\n> **输入：** spells = [3,1,2], potions = [8,5,8], success = 16\n> **输出：**[2,0,2]\n> **解释：**\n> - 第 0 个咒语：3 *[8,5,8] = [***24***,15,***24***] 。总共 2 个成功组合。\n> - 第 1 个咒语：1 * [8,5,8] = [8,5,8] 。总共 0 个成功组合。\n> - 第 2 个咒语：2 *[8,5,8] = [***16***,10,***16***] 。总共 2 个成功组合。\n> 所以返回 [2,0,2] 。\n\n**提示：**\n*   `n == spells.length`\n*   `m == potions.length`\n*   `1 <= n, m <= 105`\n*   `1 <= spells[i], potions[i] <= 105`\n*   `1 <= success <= 1010`",
+    "solutionText": "class Solution(object):\n    def successfulPairs(self, spells, potions, success):\n        mx = max(potions)\n        cnt = [0] * (mx + 1)\n        for y in potions:\n            cnt[y] += 1\n        \n        for i in range(mx - 1, -1, -1):  # 后缀和 → cnt[i] 代表强度 >= i 的药水总数量\n            cnt[i] += cnt[i + 1]\n        \n        for i, x in enumerate(spells):\n            low = (success - 1) // x + 1  # 计算当前咒语 x 至少需要多大的药水 low 才能满足 x*y >= success\n            spells[i] = cnt[low] if low <= mx else 0\n        return spells\n        \"\"\"\n        :type spells: List[int]\n        :type potions: List[int]\n        :type success: int\n        :rtype: List[int]\n        \"\"\"\n        ",
+    "images": {},
+    "isPinned": false
+  },
+  {
+    "type": "algorithm",
+    "isPinned": false,
+    "id": "1774343695728",
+    "title": "399. 除法求值",
+    "category": "深度优先搜索 广度优先搜索 并查集",
+    "difficulty": "中等",
+    "language": "python",
+    "problemText": "给你一个变量对数组 `equations` 和一个实数值数组 `values` 作为已知条件，其中 `equations[i] = [Ai, Bi]` 和 `values[i]` 共同表示等式 `Ai / Bi = values[i]` 。每个 `Ai` 或 `Bi` 是一个表示单个变量的字符串。\n另有一些以数组 `queries` 表示的问题，其中 `queries[j] = [Cj, Dj]` 表示第 `j` 个问题，请你根据已知条件找出 `Cj / Dj = ?` 的结果作为答案。\n返回 **所有问题的答案** 。如果存在某个无法确定的答案，则用 `-1.0` 替代这个答案。如果问题中出现了给定的已知条件中没有出现的字符串，也需要用 `-1.0` 替代这个答案。\n**注意：** 输入总是有效的。你可以假设除法运算中不会出现除数为 0 的情况，且不存在任何矛盾的结果。\n**注意：** 未在等式列表中出现的变量是未定义的，因此无法确定它们的答案。\n\n**示例 1：**\n> **输入：** equations = [[\"a\",\"b\"],[\"b\",\"c\"]], values = [2.0,3.0], queries = [[\"a\",\"c\"],[\"b\",\"a\"],[\"a\",\"e\"],[\"a\",\"a\"],[\"x\",\"x\"]]\n> **输出：**[6.00000,0.50000,-1.00000,1.00000,-1.00000]\n> **解释：**\n> 条件：*a / b = 2.0*,*b / c = 3.0*\n> 问题：*a / c = ?*,*b / a = ?*,*a / e = ?*,*a / a = ?*,*x / x = ?*\n> 结果：[6.0, 0.5, -1.0, 1.0, -1.0 ]\n> 注意：x 是未定义的 => -1.0\n\n**示例 2：**\n> **输入：** equations = [[\"a\",\"b\"],[\"b\",\"c\"],[\"bc\",\"cd\"]], values = [1.5,2.5,5.0], queries = [[\"a\",\"c\"],[\"c\",\"b\"],[\"bc\",\"cd\"],[\"cd\",\"bc\"]]\n> **输出：**[3.75000,0.40000,5.00000,0.20000]\n\n**示例 3：**\n> **输入：** equations = [[\"a\",\"b\"]], values = [0.5], queries = [[\"a\",\"b\"],[\"b\",\"a\"],[\"a\",\"c\"],[\"x\",\"y\"]]\n> **输出：**[0.50000,2.00000,-1.00000,-1.00000]\n\n**提示：**\n*   `1 <= equations.length <= 20`\n*   `equations[i].length == 2`\n*   `1 <= Ai.length, Bi.length <= 5`\n*   `values.length == equations.length`\n*   `0.0 < values[i] <= 20.0`\n*   `1 <= queries.length <= 20`\n*   `queries[i].length == 2`\n*   `1 <= Cj.length, Dj.length <= 5`\n*   `Ai, Bi, Cj, Dj` 由小写英文字母与数字组成",
+    "solutionText": "class Solution(object):\n    def calcEquation(self, equations, values, queries):\n        from collections import defaultdict\n        graph = defaultdict(int)  # 构建图：key 是 (变量a, 变量b)，value 是 a / b 的结果\n        set1 = set()\n        for i in range(len(equations)):\n            a, b = equations[i]\n            graph[(a, b)] = values[i]  # a / b = 对应值\n            graph[(b, a)] = 1 / values[i]  # b / a = 倒数\n            set1.add(a)\n            set1.add(b)\n        \n        arr = list(set1)\n        # k 是中间节点：i -> k -> j，即 i/j = (i/k) * (k/j)\n        for k in arr:\n            for i in arr:\n                for j in arr:\n                    # 如果 i 能到 k，且 k 能到 j（值不为 0）\n                    if graph[(i, k)] and graph[(k, j)]:\n                        graph[(i, j)] = graph[(i, k)] * graph[(k, j)]\n        \n        res = []\n        for x, y in queries:\n            if graph[(x, y)]:\n                res.append(graph[(x, y)])\n            else:\n                res.append(-1)\n        return res\n        \"\"\"\n        :type equations: List[List[str]]\n        :type values: List[float]\n        :type queries: List[List[str]]\n        :rtype: List[float]\n        \"\"\"\n        ",
+    "images": {}
+  },
+  {
+    "type": "algorithm",
+    "isPinned": false,
     "id": "1774272969421",
     "title": "1466. 重新规划路线",
     "category": "深度优先搜索 广度优先搜索",
-    "type": "algorithm",
     "difficulty": "中等",
     "language": "python",
     "problemText": "`n` 座城市，从 `0` 到 `n-1` 编号，其间共有 `n-1` 条路线。因此，要想在两座不同城市之间旅行只有唯一一条路线可供选择（路线网形成一颗树）。去年，交通运输部决定重新规划路线，以改变交通拥堵的状况。\n路线用 `connections` 表示，其中 `connections[i] = [a, b]` 表示从城市 `a` 到 `b` 的一条有向路线。\n今年，城市 0 将会举办一场大型比赛，很多游客都想前往城市 0 。\n请你帮助重新规划路线方向，使每个城市都可以访问城市 0 。返回需要变更方向的最小路线数。\n题目数据 **保证** 每个城市在重新规划路线方向后都能到达城市 0 。\n\n**示例 1：**\n\n![图片](/images/img_177427302587523.png)\n\n> **输入：** n = 6, connections = [[0,1],[1,3],[2,3],[4,0],[4,5]]\n> **输出：** 3\n> **解释：** 更改以红色显示的路线的方向，使每个城市都可以到达城市 0 。\n\n**示例 2：**\n\n![图片](/images/img_177427303335533.png)\n\n> **输入：** n = 5, connections = [[1,0],[1,2],[3,2],[3,4]]\n> **输出：** 2\n> **解释：** 更改以红色显示的路线的方向，使每个城市都可以到达城市 0 。\n\n**示例 3：**\n> **输入：** n = 3, connections = [[1,0],[2,0]]\n> **输出：** 0\n\n**提示：**\n*   `2 <= n <= 5* 10^4`\n*   `connections.length == n-1`\n*   `connections[i].length == 2`\n*   `0 <= connections[i][0], connections[i][1] <= n-1`\n*   `connections[i][0] != connections[i][1]`",
     "solutionText": "class Solution(object):\n    def minReorder(self, n, connections):\n        # 构建邻接表，存储 (邻居, 是否需要反向)\n        adj = [[] for _ in range(n)]\n        for a, b in connections:\n            adj[a].append((b, 1))  # 原方向a→b，需要反向（计数+1）\n            adj[b].append((a, 0))  # 反向b→a，不需要反向\n        \n        visited = [False] * n\n        self.res = 0  # 记录需要反向的数量\n        \n        # DFS遍历\n        def dfs(node):\n            visited[node] = True\n            for neighbor, need_reverse in adj[node]:\n                if not visited[neighbor]:\n                    self.res += need_reverse  # 需要反向则计数+1\n                    dfs(neighbor)\n        \n        dfs(0)  # 从0出发遍历\n        return self.res\n        \"\"\"\n        :type n: int\n        :type connections: List[List[int]]\n        :rtype: int\n        \"\"\"\n        ",
-    "images": {},
-    "isPinned": false
+    "images": {}
   },
   {
+    "type": "algorithm",
+    "isPinned": false,
     "id": "1774272051966",
     "title": "547. 省份数量",
     "category": "深度优先搜索 广度优先搜索",
-    "type": "algorithm",
     "difficulty": "中等",
     "language": "python",
     "problemText": "有 `n` 个城市，其中一些彼此相连，另一些没有相连。如果城市 `a` 与城市 `b` 直接相连，且城市 `b` 与城市 `c` 直接相连，那么城市 `a` 与城市 `c` 间接相连。\n**省份** 是一组直接或间接相连的城市，组内不含其他没有相连的城市。\n给你一个 `n x n` 的矩阵 `isConnected` ，其中 `isConnected[i][j] = 1` 表示第 `i` 个城市和第 `j` 个城市直接相连，而 `isConnected[i][j] = 0` 表示二者不直接相连。\n返回矩阵中 **省份** 的数量。\n\n**示例 1：**\n\n![图片](/images/img_17742721430102.jpeg)\n\n> **输入：** isConnected = [[1,1,0],[1,1,0],[0,0,1]]\n> **输出：** 2\n\n**示例 2：**\n\n![图片](/images/img_177427214968450.jpeg)\n\n> **输入：** isConnected = [[1,0,0],[0,1,0],[0,0,1]]\n> **输出：** 3\n\n**提示：**\n*   `1 <= n <= 200`\n*   `n == isConnected.length`\n*   `n == isConnected[i].length`\n*   `isConnected[i][j]` 为 `1` 或 `0`\n*   `isConnected[i][i] == 1`\n*   `isConnected[i][j] == isConnected[j][i]`",
     "solutionText": "class Solution(object):\n    def findCircleNum(self, isConnected):\n        n = len(isConnected)\n        visited = [False] * n\n        province_count = 0\n\n        def dfs(current):  # 遍历和current连通的所有城市\n            visited[current] = True\n            for j in range(n):\n                if isConnected[current][j] == 1 and not visited[j]:\n                    dfs(j)\n        \n        for i in range(n):  # 遍历所有城市\n            if not visited[i]:\n                province_count += 1\n                dfs(i)\n\n        return province_count\n        \"\"\"\n        :type isConnected: List[List[int]]\n        :rtype: int\n        \"\"\"\n        ",
-    "images": {},
-    "isPinned": false
+    "images": {}
   },
   {
+    "type": "algorithm",
+    "isPinned": false,
     "id": "1774270965355",
     "title": "841. 钥匙和房间",
     "category": "深度优先搜索 广度优先搜索",
-    "type": "algorithm",
     "difficulty": "中等",
     "language": "python",
     "problemText": "有 `n` 个房间，房间按从 `0` 到 `n - 1` 编号。最初，除 `0` 号房间外的其余所有房间都被锁住。你的目标是进入所有的房间。然而，你不能在没有获得钥匙的时候进入锁住的房间。\n当你进入一个房间，你可能会在里面找到一套 **不同的钥匙**，每把钥匙上都有对应的房间号，即表示钥匙可以打开的房间。你可以拿上所有钥匙去解锁其他房间。\n给你一个数组 `rooms` 其中 `rooms[i]` 是你进入 `i` 号房间可以获得的钥匙集合。如果能进入 **所有** 房间返回 `true`，否则返回 `false`。\n\n**示例 1：**\n> **输入：** rooms = [[1],[2],[3],[]]\n> **输出：** true\n> **解释：**\n> 我们从 0 号房间开始，拿到钥匙 1。\n> 之后我们去 1 号房间，拿到钥匙 2。\n> 然后我们去 2 号房间，拿到钥匙 3。\n> 最后我们去了 3 号房间。\n> 由于我们能够进入每个房间，我们返回 true。\n\n**示例 2：**\n> **输入：** rooms = [[1,3],[3,0,1],[2],[0]]\n> **输出：** false\n> **解释：** 我们不能进入 2 号房间。\n\n**提示：**\n*   `n == rooms.length`\n*   `2 <= n <= 1000`\n*   `0 <= rooms[i].length <= 1000`\n*   `1 <= sum(rooms[i].length) <= 3000`\n*   `0 <= rooms[i][j] < n`\n*   所有 `rooms[i]` 的值**互不相同**",
     "solutionText": "class Solution(object):\n    def canVisitAllRooms(self, rooms):\n        n = len(rooms)\n        res = [1] * n\n        res[0] = 0\n        from collections import deque\n        queue = deque(rooms[0])\n        while queue:\n            room_num = queue.popleft()  # 取出当前要访问的房间号\n            # 如果该房间未被访问过\n            if res[room_num] == 1:\n                res[room_num] = 0  # 标记为已访问\n                for key in rooms[room_num]:  # 将该房间的钥匙加入队列\n                    queue.append(key)\n        return sum(res) == 0\n        \"\"\"\n        :type rooms: List[List[int]]\n        :rtype: bool\n        \"\"\"\n        ",
-    "images": {},
-    "isPinned": false
+    "images": {}
   },
   {
     "type": "algorithm",
